@@ -88,25 +88,41 @@ function displayContent() {
 
 }
 
-const ORIGIN = "https://my.openathens.net";
+const ORIGIN = "openathens.net";
 
-chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
-    if (!tab.url) return;
-    const url = new URL(tab.url);
-    // Enables the side panel
-    if (url.origin === ORIGIN) {
-        GetContent();
+// chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
+//     if (!tab.url) return;
+//     const url = new URL(tab.url);
+//     // Enables the side panel
+//     if (url.origin === ORIGIN) {
+//         GetContent();
 
-    } else {
-        display = false;
-        chrome.action.setBadgeText({ text: "" });
-        chrome.action.setTitle({ title: "" });
+//     } else {
+//         display = false;
+//         chrome.action.setBadgeText({ text: "" });
+//         chrome.action.setTitle({ title: "" });
 
+//     }
+// });
+// chrome.webNavigation.onCompleted.addListener(
+//     async () => {
+//       await chrome.action.openPopup();
+//     },
+//     { url: [
+//       { urlMatches: ORIGIN },
+//     ] },
+//   );
+
+  chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+    if (changeInfo.status == 'complete') {
+      if (tab.url.indexOf(ORIGIN) != -1) {
+     
+          chrome.action.openPopup();
+          
+      }
+  
     }
-});
-
-
-
+  });
 
 GetContent();
 
