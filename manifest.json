@@ -17,6 +17,7 @@
   "cookies",
   "bookmarks",
   "sidePanel",
+  "contextMenus",
   "background","webRequest","webNavigation","tabs","notifications", "scripting"
 
 ],

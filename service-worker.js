@@ -13,6 +13,21 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
 });
 
+
+chrome.runtime.onInstalled.addListener(() =>
+    chrome.contextMenus.create({
+        title: 'Search University of London Libraries for "%s"',
+        contexts: ["selection"],
+        id: "myContextMenuId",
+    })
+);
+    
+chrome.contextMenus.onClicked.addListener((info, tab) =>
+    chrome.tabs.create({
+        url: `https://search.libraries.london.ac.uk/discovery/search?query=any,contains,${encodeURIComponent(info.selectionText)}&vid=44SHL_INST:MAIN` 
+    })
+);
+
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
   if (changeInfo.status == 'complete' && tab.active) {
@@ -28,7 +43,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
 
 });
-
 
 
 function GetContent() {
