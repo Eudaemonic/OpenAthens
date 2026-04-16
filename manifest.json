@@ -16,9 +16,13 @@
   "permissions": [
   "cookies",
   "bookmarks",
-  "sidePanel"
+  "sidePanel",
+  "background","webRequest","webNavigation","tabs","notifications", "scripting"
 
 ],
+ "background": {
+    "service_worker": "service-worker.js", "type": "module"
+  },
 "host_permissions": [
     "https://my.openathens.net/*",
   "*://*/*"

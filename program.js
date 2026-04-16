@@ -1,7 +1,5 @@
-
 var display = true;
 
-function GetContent() {
 
     chrome.cookies.get({ url: 'https://my.openathens.net', name: 'oa-session' },
         function (cookie) {
@@ -32,10 +30,6 @@ function GetContent() {
 
             displayContent();
         });
-
-}
-
-
 
 
 
@@ -87,24 +81,3 @@ function displayContent() {
     }
 
 }
-
-const ORIGIN = "openathens.net";
-
-
-document.getElementById('open-side-panel').addEventListener('click', () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.sidePanel.open({ tabId: tabs[0].id });
-  });
-
-  chrome.windows.getLastFocused(w => {
-  chrome.extension.getViews({type: 'popup', windowId: w.id}).forEach(v => v.close());
-});
-
-GetContent();
-
-});
-
-GetContent();
-
-
-   

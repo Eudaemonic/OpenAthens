@@ -36,9 +36,6 @@ function GetContent() {
 }
 
 
-
-
-
 function getCatalogueLink(orgId) {
 
     return "https://search.libraries.london.ac.uk/discovery/search?vid=44SHL_INST:" + getOrgName(orgId);
@@ -90,19 +87,43 @@ function displayContent() {
 
 const ORIGIN = "openathens.net";
 
+var databaseList = [];
 
-document.getElementById('open-side-panel').addEventListener('click', () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.sidePanel.open({ tabId: tabs[0].id });
-  });
+chrome.runtime.sendMessage({foo: 'bar'}, response => {
 
-  chrome.windows.getLastFocused(w => {
-  chrome.extension.getViews({type: 'popup', windowId: w.id}).forEach(v => v.close());
+    databaseList = JSON.parse(response).services;
+    var x = "<ul>";
+
+       databaseList.forEach(service => {  
+            x += "<li><a href='" + service.link + "' target='_blank'>" + service.title + "</a><br/><p>" + service.description + "</p></li>";
+        });
+
+    x += "</ul>";
+
+    document.getElementById('services').innerHTML = x;
 });
 
-GetContent();
+
+document.addEventListener('DOMContentLoaded', function () {
+ document.getElementById('database-search').addEventListener('keyup', () => {
+  
+   document.getElementById('services').innerHTML = "Loading...";
+     var x = "<ul>";
+
+       databaseList.forEach(service => { 
+        if(service.title.toLowerCase().includes(document.getElementById('database-search').value.toLowerCase())) {
+            x += "<li><a href='" + service.link + "' target='_blank'>" + service.title + "</a><br/><p>" + service.description + "</p></li>";
+        }
+        });
+
+    x += "</ul>";
+
+    document.getElementById('services').innerHTML = x;
+});
 
 });
+
+
 
 GetContent();
 
