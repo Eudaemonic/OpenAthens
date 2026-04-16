@@ -4,7 +4,7 @@
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.foo === 'bar') {
-    var url = "https://app.libraries.london.ac.uk/umbraco/api/openathensapi/getservices";
+    var url = "https://app.libraries.london.ac.uk/umbraco/api/libapps/getaz";
     fetch(url)
       .then(response => response.text()
         .then(t => sendResponse(t))
@@ -19,10 +19,10 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
     GetContent();
 
-    if (tab.url.indexOf("openathens.net")  > -1 &&
-      changeInfo.url === undefined) {
-      chrome.action.openPopup();
-    }
+    // if (tab.url.indexOf("openathens.net")  > -1 &&
+    //   changeInfo.url === undefined) {
+    //   chrome.action.openPopup();
+    // }
   }
 
 
@@ -46,7 +46,7 @@ function GetContent() {
 
       else {
 
-        display = false;
+    
         chrome.action.setBadgeText({ text: "" });
         chrome.action.setTitle({ title: "" });
         console.log('Can\'t get cookie! Check the name!');

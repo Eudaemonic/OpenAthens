@@ -13,12 +13,22 @@ function GetContent() {
 
                 document.getElementById('cookie-status').textContent = jwt.on;
                 document.getElementById('cookie-identity').textContent = jwt.a;
-                document.getElementById('catalogue-link').href = getCatalogueLink(jwt.o);
 
-                chrome.action.setBadgeText({ text: getOrgName(jwt.o) });
+                if (getOrgName(jwt.o).length > 0) {
+
+
+                    document.getElementById('catalogue-link').href = getCatalogueLink(jwt.o);
+                    document.getElementById('catalogue-link').style.display = "block";
+                    chrome.action.setBadgeText({ text: getOrgName(jwt.o) });
+
+                } else {
+                    
+                    document.getElementById('catalogue-link').style.display = "none";
+                    chrome.action.setBadgeText({ text: jwt.o.substring(0, 6) });
+
+                }
+
                 chrome.action.setTitle({ title: "You are now logged in as " + jwt.on });
-
-
 
             }
 
@@ -92,19 +102,18 @@ const ORIGIN = "openathens.net";
 
 
 document.getElementById('open-side-panel').addEventListener('click', () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.sidePanel.open({ tabId: tabs[0].id });
-  });
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.sidePanel.open({ tabId: tabs[0].id });
+    });
 
-  chrome.windows.getLastFocused(w => {
-  chrome.extension.getViews({type: 'popup', windowId: w.id}).forEach(v => v.close());
+    chrome.windows.getLastFocused(w => {
+        chrome.extension.getViews({ type: 'popup', windowId: w.id }).forEach(v => v.close());
+    });
+
+    GetContent();
+
 });
 
 GetContent();
 
-});
 
-GetContent();
-
-
-   

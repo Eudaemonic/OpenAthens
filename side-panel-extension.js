@@ -91,11 +91,11 @@ var databaseList = [];
 
 chrome.runtime.sendMessage({foo: 'bar'}, response => {
 
-    databaseList = JSON.parse(response).services;
+    databaseList = JSON.parse(response);
     var x = "<ul>";
 
        databaseList.forEach(service => {  
-            x += "<li><a href='" + service.link + "' target='_blank'>" + service.title + "</a><br/><p>" + service.description + "</p></li>";
+            x += "<li><a href='" + service.url + "' target='_blank'>" + service.name + "</a><br/><p>" + parseDescription(service.description) + "</p></li>";
         });
 
     x += "</ul>";
@@ -111,8 +111,8 @@ document.addEventListener('DOMContentLoaded', function () {
      var x = "<ul>";
 
        databaseList.forEach(service => { 
-        if(service.title.toLowerCase().includes(document.getElementById('database-search').value.toLowerCase())) {
-            x += "<li><a href='" + service.link + "' target='_blank'>" + service.title + "</a><br/><p>" + service.description + "</p></li>";
+        if(service.name.toLowerCase().includes(document.getElementById('database-search').value.toLowerCase())) {
+            x += "<li><a href='" + service.url + "' target='_blank'>" + service.name + "</a><br/><p>" + parseDescription(service.description)+ "</p></li>";
         }
         });
 
@@ -122,6 +122,20 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 });
+
+function parseDescription(t){
+
+    var i = t.replace(/<[^>]*>?/gm, '');
+    var limit = 100;
+    if(i !== 'undefined' && i.length > 0){
+        if(i.length > limit){
+            return i.substring(0, limit) + "...";
+        }
+        return i;
+    }
+
+}
+
 
 
 
