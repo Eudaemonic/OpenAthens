@@ -85,13 +85,31 @@ function displayContent() {
 
 }
 
+
+function dynamicSort(property) {
+    var sortOrder = 1;
+    if(property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+    }
+    return function (a,b) {
+        /* next line works with strings and numbers, 
+         * and you may want to customize it to your needs
+         */
+        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+        return result * sortOrder;
+    }
+}
+
 const ORIGIN = "openathens.net";
 
 var databaseList = [];
 
 chrome.runtime.sendMessage({foo: 'bar'}, response => {
 
-    databaseList = JSON.parse(response);
+    var y = JSON.parse(response);
+
+    databaseList = y.sort(dynamicSort("name") );
     var x = "<ul>";
 
        databaseList.forEach(service => {  
@@ -118,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     x += "</ul>";
 
-    document.getElementById('services').innerHTML = x;
+    document.getElementById('services').innerHTML =  x;
 });
 
 });
@@ -127,7 +145,7 @@ function parseDescription(t){
 
     var i = t.replace(/<[^>]*>?/gm, '');
     var limit = 100;
-    if(i !== 'undefined' && i.length > 0){
+    if(i !== 'undefined' || i.length > 0){
         if(i.length > limit){
             return i.substring(0, limit) + "...";
         }
